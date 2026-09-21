@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Gestionnaire de mots de passe sécurisé"
+    >
+
+    <title>SecureVault - Gestionnaire de mots de passe</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<!-- =====================================================
+     AUTHENTIFICATION
+===================================================== -->
+
+<section id="authPage" class="auth-page">
+
+    <div class="auth-card">
+
+        <div class="brand-logo">
+            🔐
+        </div>
+
+        <h1>SecureVault</h1>
+
+        <p class="auth-subtitle">
+            Votre coffre-fort numérique
+        </p>
+
+
+        <!-- PREMIÈRE CONFIGURATION -->
+
+        <div id="setupBox">
+
+            <div class="security-message">
+                <span>🛡️</span>
+
+                <div>
+                    <strong>Créer votre coffre-fort</strong>
+
+                    <p>
+                        Choisissez un mot de passe maître.
+                        Il ne sera jamais enregistré.
+                    </p>
+                </div>
+            </div>
+
+
+            <form id="setupForm">
+
+                <div class="input-group">
+
+                    <label for="setupPassword">
+                        Mot de passe maître
+                    </label>
+
+                    <div class="password-wrapper">
+
+                        <input
+                            type="password"
+                            id="setupPassword"
+                            placeholder="Minimum 8 caractères"
+                            autocomplete="new-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="eye-button"
+                            data-target="setupPassword"
+                        >
+                            👁
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="input-group">
+
+                    <label for="setupPasswordConfirm">
+                        Confirmer le mot de passe
+                    </label>
+
+                    <div class="password-wrapper">
+
+                        <input
+                            type="password"
+                            id="setupPasswordConfirm"
+                            placeholder="Confirmez votre mot de passe"
+                            autocomplete="new-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="eye-button"
+                            data-target="setupPasswordConfirm"
+                        >
+                            👁
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="setupPasswordStrength"
+                    class="password-strength"
+                ></div>
+
+
+                <button
+                    type="submit"
+                    class="btn btn-primary btn-full"
+                >
+                    🔐 Créer mon coffre-fort
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <!-- CONNEXION -->
+
+        <div id="loginBox" class="hidden">
+
+            <div class="security-message">
+
+                <span>🔒</span>
+
+                <div>
+
+                    <strong>
+                        Coffre-fort verrouillé
+                    </strong>
+
+                    <p>
+                        Entrez votre mot de passe maître
+                        pour continuer.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form id="loginForm">
+
+                <div class="input-group">
+
+                    <label for="loginPassword">
+                        Mot de passe maître
+                    </label>
+
+                    <div class="password-wrapper">
+
+                        <input
+                            type="password"
+                            id="loginPassword"
+                            placeholder="Votre mot de passe maître"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            class="eye-button"
+                            data-target="loginPassword"
+                        >
+                            👁
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="btn btn-primary btn-full"
+                >
+                    🔓 Déverrouiller
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <p id="authMessage" class="auth-message"></p>
+
+        <div class="security-footer">
+            🔒 AES-256-GCM • PBKDF2 • Stockage local
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     APPLICATION
+===================================================== -->
+
+<section id="appPage" class="app-page hidden">
+
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+        <div class="header-left">
+
+            <div class="header-logo">
+                🔐
+            </div>
+
+            <div>
+
+                <h2>SecureVault</h2>
+
+                <span>
+                    Coffre-fort sécurisé
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="header-actions">
+
+            <button
+                id="lockButton"
+                class="header-button"
+                title="Verrouiller"
+            >
+                🔒 Verrouiller
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- CONTENU -->
+
+    <main class="container">
+
+
+        <!-- HERO -->
+
+        <section class="dashboard-header">
+
+            <div>
+
+                <div class="welcome-line">
+                    <span class="status-dot"></span>
+                    Coffre-fort déverrouillé
+                </div>
+
+                <h1>
+                    Mes mots de passe
+                </h1>
+
+                <p>
+                    Gérez vos identifiants depuis un seul endroit.
+                </p>
+
+            </div>
+
+
+            <button
+                id="addPasswordButton"
+                class="btn btn-primary"
+            >
+                <span>＋</span>
+                Ajouter un compte
+            </button>
+
+        </section>
+
+
+        <!-- STATISTIQUES -->
+
+        <section class="stats">
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    🔐
+                </div>
+
+                <div>
+
+                    <span class="stat-label">
+                        Comptes
+                    </span>
+
+                    <strong id="totalPasswords">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    🌐
+                </div>
+
+                <div>
+
+                    <span class="stat-label">
+                        Sites
+                    </span>
+
+                    <strong id="totalSites">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    🛡️
+                </div>
+
+                <div>
+
+                    <span class="stat-label">
+                        Protection
+                    </span>
+
+                    <strong>
+                        AES-256
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- BARRE DE RECHERCHE -->
+
+        <section class="toolbar">
+
+            <div class="search-wrapper">
+
+                <span class="search-icon">
+                    🔎
+                </span>
+
+                <input
+                    type="search"
+                    id="searchInput"
+                    placeholder="Rechercher un site, un identifiant..."
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <button
+                id="generateButton"
+                class="btn btn-secondary"
+            >
+                🎲 Générateur
+            </button>
+
+        </section>
+
+
+        <!-- LISTE -->
+
+        <section>
+
+            <div
+                id="passwordList"
+                class="password-grid"
+            ></div>
+
+
+            <div
+                id="emptyState"
+                class="empty-state hidden"
+            >
+
+                <div class="empty-icon">
+                    🔐
+                </div>
+
+                <h3>
+                    Votre coffre-fort est vide
+                </h3>
+
+                <p>
+                    Ajoutez votre premier compte
+                    pour commencer.
+                </p>
+
+                <button
+                    id="emptyAddButton"
+                    class="btn btn-primary"
+                >
+                    ＋ Ajouter un compte
+                </button>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- FOOTER -->
+
+    <footer class="footer">
+
+        <span>
+            SecureVault
+        </span>
+
+        <span>
+            Vos données restent dans ce navigateur.
+        </span>
+
+    </footer>
+
+</section>
+
+
+<!-- =====================================================
+     MODAL AJOUT / MODIFICATION
+===================================================== -->
+
+<div
+    id="passwordModal"
+    class="modal hidden"
+>
+
+    <div class="modal-content">
+
+        <div class="modal-header">
+
+            <div>
+
+                <span class="modal-icon">
+                    🔐
+                </span>
+
+                <div>
+
+                    <h2 id="modalTitle">
+                        Ajouter un compte
+                    </h2>
+
+                    <p>
+                        Enregistrez vos identifiants.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <button
+                id="closeModal"
+                class="close-button"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <form id="passwordForm">
+
+            <input
+                type="hidden"
+                id="editId"
+            >
+
+
+            <div class="form-grid">
+
+                <!-- SITE -->
+
+                <div class="input-group">
+
+                    <label for="siteName">
+                        Nom du site *
+                    </label>
+
+                    <input
+                        type="text"
+                        id="siteName"
+                        placeholder="Ex : Gmail"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- URL -->
+
+                <div class="input-group">
+
+                    <label for="siteUrl">
+                        URL
+                    </label>
+
+                    <input
+                        type="url"
+                        id="siteUrl"
+                        placeholder="https://gmail.com"
+                    >
+
+                </div>
+
+
+            </div>
+
+
+            <!-- IDENTIFIANT -->
+
+            <div class="input-group">
+
+                <label for="username">
+                    Identifiant / Email
+                </label>
+
+                <input
+                    type="text"
+                    id="username"
+                    placeholder="exemple@gmail.com"
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="input-group">
+
+                <div class="label-row">
+
+                    <label for="accountPassword">
+                        Mot de passe *
+                    </label>
+
+                    <button
+                        type="button"
+                        id="generatePasswordButton"
+                        class="generate-link"
+                    >
+                        🎲 Générer
+                    </button>
+
+                </div>
+
+
+                <div class="password-wrapper">
+
+                    <input
+                        type="password"
+                        id="accountPassword"
+                        placeholder="Mot de passe"
+                        autocomplete="new-password"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="eye-button"
+                        data-target="accountPassword"
+                    >
+                        👁
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- FORCE -->
+
+            <div
+                id="accountPasswordStrength"
+                class="password-strength"
+            ></div>
+
+
+            <!-- NOTES -->
+
+            <div class="input-group">
+
+                <label for="notes">
+                    Notes
+                </label>
+
+                <textarea
+                    id="notes"
+                    placeholder="Informations supplémentaires..."
+                ></textarea>
+
+            </div>
+
+
+            <div class="modal-actions">
+
+                <button
+                    type="button"
+                    id="cancelModal"
+                    class="btn btn-secondary"
+                >
+                    Annuler
+                </button>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    💾 Enregistrer
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     MODAL GENERATEUR
+===================================================== -->
+
+<div
+    id="generatorModal"
+    class="modal hidden"
+>
+
+    <div class="modal-content generator-content">
+
+        <div class="modal-header">
+
+            <div>
+
+                <span class="modal-icon">
+                    🎲
+                </span>
+
+                <div>
+
+                    <h2>
+                        Générateur
+                    </h2>
+
+                    <p>
+                        Créez un mot de passe sécurisé.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <button
+                id="closeGenerator"
+                class="close-button"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <div class="generated-password-box">
+
+            <input
+                type="text"
+                id="generatedPassword"
+                readonly
+            >
+
+            <button
+                id="copyGeneratedPassword"
+                title="Copier"
+            >
+                📋
+            </button>
+
+        </div>
+
+
+        <div class="generator-options">
+
+            <div class="range-row">
+
+                <label for="passwordLength">
+                    Longueur
+                </label>
+
+                <strong id="passwordLengthValue">
+                    20
+                </strong>
+
+            </div>
+
+
+            <input
+                type="range"
+                id="passwordLength"
+                min="8"
+                max="64"
+                value="20"
+            >
+
+
+            <label class="checkbox-row">
+
+                <input
+                    type="checkbox"
+                    id="includeUppercase"
+                    checked
+                >
+
+                <span>
+                    Lettres majuscules
+                </span>
+
+            </label>
+
+
+            <label class="checkbox-row">
+
+                <input
+                    type="checkbox"
+                    id="includeLowercase"
+                    checked
+                >
+
+                <span>
+                    Lettres minuscules
+                </span>
+
+            </label>
+
+
+            <label class="checkbox-row">
+
+                <input
+                    type="checkbox"
+                    id="includeNumbers"
+                    checked
+                >
+
+                <span>
+                    Chiffres
+                </span>
+
+            </label>
+
+
+            <label class="checkbox-row">
+
+                <input
+                    type="checkbox"
+                    id="includeSymbols"
+                    checked
+                >
+
+                <span>
+                    Symboles
+                </span>
+
+            </label>
+
+        </div>
+
+
+        <div class="modal-actions">
+
+            <button
+                id="regenerateButton"
+                class="btn btn-secondary"
+            >
+                🔄 Régénérer
+            </button>
+
+            <button
+                id="useGeneratedPassword"
+                class="btn btn-primary"
+            >
+                Utiliser ce mot de passe
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div
+    id="toast"
+    class="toast"
+></div>
+
+
+<script src="app.js"></script>
+
+</body>
+</html>
